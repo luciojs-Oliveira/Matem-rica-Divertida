@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemática Divertida - Início</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Globais e de Fundo */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a7f0ba, #ffe78a);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* Novo Wrapper para o Título e o Formulário */
+        .main-content-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            max-width: 90%;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+
+        /* Título Principal - Agora ao lado do formulário */
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #3a7bd5;
+            font-size: 3.5em;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            white-space: nowrap;
+            flex-shrink: 0;
+            padding: 10px;
+        }
+
+        /* Contêiner Principal do Formulário e Regras */
+        .container {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 100%;
+            max-width: 550px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            animation: fadeIn 1s ease-out;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        /* Animação de Entrada do Contêiner */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Bloco de Regras do Jogo */
+        .regras-jogo {
+            background-color: #f9f7d9;
+            border: 2px dashed #8ac4ff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.05);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-out, padding 0.7s ease-out, margin-bottom 0.7s ease-out;
+            opacity: 0;
+            visibility: hidden;
+            flex-shrink: 0;
+        }
+
+        /* Quando as regras estão visíveis */
+        .regras-jogo.visible {
+            max-height: 400px;
+            padding: 15px;
+            margin-bottom: 20px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .regras-jogo h2 {
+            color: #f78ca0;
+            font-size: 1.6em;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Estilo para cada item de regra (parágrafo) */
+        .regras-jogo p {
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 8px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .regras-jogo p.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .regras-jogo strong {
+            color: #e66465;
+        }
+
+        /* Grupos de Formulário (Label + Input/Select) */
+        .form-group {
+            margin-bottom: 10px;
+            text-align: left;
+            flex-shrink: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* Estilo do Placeholder */
+        input::placeholder {
+            color: #bbb;
+        }
+
+        /* Campos de Input e Select */
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: calc(100% - 20px);
+            padding: 8px 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus {
+            border-color: #74b9ff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(116, 185, 255, 0.3);
+        }
+
+        /* Botões */
+        .button-group {
+            margin-top: auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            flex-shrink: 0;
+            padding-top: 10px;
+        }
+
+        button {
+            background-color: #0984e3;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #0765c4;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Botão do Ranking */
+        .btn-ranking {
+            background-color: #feca57;
+            color: #333;
+        }
+
+        .btn-ranking:hover {
+            background-color: #f9b324;
+        }
+
+        /* Novo Botão "Como Jogar?" */
+        .btn-regras {
+            background-color: #5cb85c;
+            color: white;
+        }
+        .btn-regras:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Mensagem de Erro */
+        .error-message {
+            color: #e74c3c;
+            margin-top: 8px;
+            font-weight: bold;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        /* Responsividade para Telas Menores */
+        @media (max-width: 900px) {
+            .main-content-wrapper {
+                flex-direction: column;
+                gap: 25px;
+            }
+            h1 {
+                font-size: 2.8em;
+                margin-bottom: 0;
+            }
+            .container {
+                max-height: calc(100vh - 40px - 2.8em - 25px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.2em;
+            }
+            .container {
+                padding: 15px;
+                max-height: calc(100vh - 20px - 2.2em - 25px);
+            }
+            .regras-jogo {
+                padding: 10px;
+            }
+            .regras-jogo h2 {
+                font-size: 1.3em;
+            }
+            .regras-jogo p {
+                font-size: 0.9em;
+            }
+            label {
+                font-size: 0.9em;
+                margin-bottom: 3px;
+            }
+            input[type="text"],
+            input[type="email"],
+            select {
+                padding: 6px 8px;
+                font-size: 0.85em;
+            }
+            .form-group {
+                margin-bottom: 8px;
+            }
+            .button-group {
+                gap: 8px;
+                margin-top: 10px;
+                padding-top: 5px;
+            }
+            button {
+                font-size: 0.9em;
+                padding: 9px 18px;
+            }
+            .error-message {
+                font-size: 0.8em;
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            .container {
+                padding: 10px;
+                max-width: 95%;
+                max-height: calc(100vh - 20px - 1.8em - 15px);
+            }
+            .regras-jogo.visible {
+                max-height: 250px;
+            }
+            .form-group {
+                margin-bottom: 6px;
+            }
+            label {
+                font-size: 0.85em;
+            }
+            input[type="text"],
+            input[type="email"],
+            select {
+                padding: 5px 7px;
+                font-size: 0.8em;
+            }
+            button {
+                padding: 7px 12px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content-wrapper">
+        <h1>Matemática <br> Divertida</h1>
+
+        <div class="container">
+            <div class="regras-jogo" id="regras-jogo-bloco">
+                <h2>Como Jogar:</h2>
+                <p class="regra-item">1. Primeiro, preencha seu **nome**, a **escola**, a **professora** e a **série** para começar.</p>
+                <p class="regra-item">2. Clique em **"Iniciar Jogo"**.</p>
+                <p class="regra-item">3. O jogo vai mostrar contas de **Adição, Subtração, Multiplicação e Divisão**.</p>
+                <p class="regra-item">4. Para cada operação, você terá **5 contas para resolver**.</p>
+                <p class="regra-item">5. Digite sua resposta no campo e clique em **"Verificar"** (ou aperte Enter).</p>
+                <p class="regra-item">6. Se você acertar, verá uma mensagem legal! Se errar, não tem problema, o jogo te diz a resposta certa.</p>
+                <p class="regra-item">7. Depois de 5 contas, o jogo muda para a **próxima operação**. Quando terminar todas, você verá seu **relatório final**!</p>
+                <p class="regra-item">8. No final, você pode **jogar de novo** ou ver seu **desempenho no Ranking**!</p>
+                <p style="text-align: center; margin-top: 10px; font-weight: bold;">Divirta-se e aprenda muito! ✨</p>
+            </div>
+
+            <form id="form-cadastro">
+                <div class="form-group">
+                    <label for="nome">Seu Nome:</label>
+                    <input type="text" id="nome" placeholder="Digite seu nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="escola">Nome da Escola:</label>
+                    <input type="text" id="escola" placeholder="Digite o nome da sua escola" required>
+                </div>
+                <div class="form-group">
+                    <label for="professora">Nome da Professora:</label>
+                    <input type="text" id="professora" placeholder="Digite o nome da sua professora" required>
+                </div>
+                <div class="form-group">
+                    <label for="serie">Sua Série:</label>
+                    <select id="serie" required>
+                        <option value="">Selecione sua série</option>
+                        <option value="1">1ª Série</option>
+                        <option value="2">2ª Série</option>
+                        <option value="3">3ª Série</option>
+                        <option value="4">4ª Série</option>
+                        <option value="5">5ª Série</option>
+                    </select>
+                </div>
+                <p class="error-message" id="error-message">Por favor, preencha todos os campos!</p>
+                <div class="button-group">
+                    <button type="submit">Iniciar Jogo</button>
+                    <button type="button" class="btn-ranking" onclick="window.location.href='ranking.html'">Ver Ranking</button>
+                    <button type="button" class="btn-regras" id="btn-toggle-regras">Como Jogar?</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const formCadastro = document.getElementById('form-cadastro');
+        const nomeInput = document.getElementById('nome');
+        const escolaInput = document.getElementById('escola');
+        const professoraInput = document.getElementById('professora');
+        const serieSelect = document.getElementById('serie');
+        const errorMessage = document.getElementById('error-message');
+        const regrasJogoBloco = document.getElementById('regras-jogo-bloco');
+        const regraItens = document.querySelectorAll('.regra-item');
+        const btnToggleRegras = document.getElementById('btn-toggle-regras');
+
+        function animateIndividualRules() {
+            regraItens.forEach(item => {
+                item.classList.remove('show');
+            });
+
+            regraItens.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('show');
+                }, index * 100);
+            });
+        }
+
+        btnToggleRegras.addEventListener('click', () => {
+            regrasJogoBloco.classList.toggle('visible');
+            
+            if (regrasJogoBloco.classList.contains('visible')) {
+                setTimeout(animateIndividualRules, 500);
+                btnToggleRegras.textContent = 'Ocultar Regras';
+            } else {
+                regraItens.forEach(item => {
+                    item.classList.remove('show');
+                });
+                btnToggleRegras.textContent = 'Como Jogar?';
+            }
+        });
+
+        formCadastro.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            if (nomeInput.value.trim() === '' || escolaInput.value.trim() === '' || professoraInput.value.trim() === '' || serieSelect.value === '') {
+                errorMessage.style.display = 'block';
+                return;
+            } else {
+                errorMessage.style.display = 'none';
+            }
+
+            // 1. Salva os dados do aluno no localStorage
+            const aluno = {
+                aluno: nomeInput.value.trim(),
+                escola: escolaInput.value.trim(),
+                professora: professoraInput.value.trim(),
+                serie: serieSelect.value
+            };
+            localStorage.setItem('alunoAtual', JSON.stringify(aluno));
+
+            // 2. Limpa os campos do formulário IMEDIATAMENTE após salvar e antes de redirecionar
+            nomeInput.value = '';
+            escolaInput.value = '';
+            professoraInput.value = '';
+            serieSelect.value = '';
+
+            // 3. Redireciona para a página do jogo
+            window.location.href = 'jogo.html';
+        });
+
+        // NOTA: O bloco 'DOMContentLoaded' que carregava dados do localStorage
+        // FOI REMOVIDO NAS VERSÕES ANTERIORES PARA GARANTIR QUE O FORMULÁRIO COMECE ZERADO.
+        // Mantenha-o removido para o comportamento desejado.
+    </script>
+</body>
+</html>

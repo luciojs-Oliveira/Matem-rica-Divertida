@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking da Matemática Divertida</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa; /* Fundo suave */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+            margin: 0; /* Remove margem padrão do body */
+            box-sizing: border-box;
+        }
+
+        .container-ranking {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 1800px;
+            box-sizing: border-box;
+            margin-top: 30px;
+            /* Flexbox para organizar os elementos internos em coluna */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza os itens horizontalmente */
+            gap: 25px; /* Espaço entre os principais blocos (título, filtros, tabela, botão) */
+        }
+
+        h1 {
+            color: #00796b;
+            margin: 0; /* Remove margem padrão do h1 para usar o gap do container */
+            font-size: 2.2em;
+        }
+
+        .filtros {
+            width: 100%; /* Ocupa a largura total do container */
+            display: flex;
+            flex-wrap: wrap; /* Permite que os itens quebrem a linha */
+            justify-content: center; /* Centraliza os filtros */
+            gap: 20px; /* Espaço entre os grupos de filtros */
+            align-items: center; /* Alinha verticalmente os labels e selects */
+        }
+
+        .filtros .filtro-serie,
+        .filtros .filtro-operacao {
+            display: flex;
+            align-items: center; /* Alinha label e select no centro verticalmente */
+            gap: 8px; /* Espaço entre label e select */
+        }
+
+        .filtros label {
+            font-weight: bold;
+            color: #555;
+            white-space: nowrap; /* Evita que o texto da label quebre */
+        }
+
+        .filtros select {
+            padding: 8px 12px;
+            border: 2px solid #b2dfdb;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            min-width: 150px; /* Garante uma largura mínima para os selects */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            /* margin-top e margin-bottom não são mais necessários aqui devido ao gap do container-ranking */
+        }
+
+        th, td {
+            border: 1px solid #e0f2f7; /* Borda da tabela */
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 1em;
+        }
+
+        th {
+            background-color: #00796b;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        td {
+            background-color: #f7feff; /* Cor clara para as células */
+            color: #333;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #eafafa; /* Linhas pares com cor diferente para legibilidade */
+        }
+
+        .btn-voltar {
+            background-color: #26a69a;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            /* margin-top não é mais necessário aqui devido ao gap do container-ranking */
+        }
+
+        .btn-voltar:hover {
+            background-color: #00897b;
+            transform: translateY(-2px);
+        }
+
+        #mensagem-sem-ranking {
+            color: #777;
+            font-size: 1.2em;
+            text-align: center;
+            width: 100%; /* Garante que ocupe a largura total para centralizar */
+            /* margin-top e margin-bottom não são mais necessários aqui devido ao gap do container-ranking */
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container-ranking {
+                padding: 20px;
+                gap: 20px; /* Ajusta o gap para telas menores */
+            }
+            th, td {
+                font-size: 0.8em; /* Diminui a fonte da tabela em telas menores */
+                padding: 8px 5px;
+            }
+            .filtros {
+                flex-direction: column; /* Empilha os filtros em telas menores */
+                gap: 15px; /* Diminui o gap entre os grupos de filtros */
+            }
+            .filtros select {
+                width: 90%; /* Ocupa mais largura em telas pequenas */
+                max-width: 250px; /* Limita a largura máxima */
+            }
+        }
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.8em; /* Reduz o tamanho do título em telas muito pequenas */
+            }
+            th, td {
+                font-size: 0.75em; /* Reduz a fonte da tabela ainda mais */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-ranking">
+        <h1>Ranking dos Alunos</h1>
+
+        <div class="filtros">
+            <div class="filtro-serie">
+                <label for="filtro-serie">Filtrar por Série:</label>
+                <select id="filtro-serie">
+                    <option value="todos">Todas</option>
+                    <option value="1">1ª Série</option>
+                    <option value="2">2ª Série</option>
+                    <option value="3">3ª Série</option>
+                    <option value="4">4ª Série</option>
+                    <option value="5">5ª Série</option>
+                </select>
+            </div>
+            <div class="filtro-operacao">
+                <label for="filtro-operacao">Filtrar por Operação:</label>
+                <select id="filtro-operacao">
+                    <option value="todas">Todas</option>
+                    <option value="+">Adição (+)</option>
+                    <option value="-">Subtração (-)</option>
+                    <option value="x">Multiplicação (x)</option>
+                    <option value="÷">Divisão (÷)</option>
+                </select>
+            </div>
+        </div>
+
+        <table id="tabela-ranking">
+            <thead>
+                <tr>
+                    <th>Aluno(a)</th>
+                    <th>Escola</th>
+                    <th>Professora</th>
+                    <th>Série</th>
+                    <th>Operação</th>
+                    <th>Acertos</th>
+                    <th>Total Perg.</th>
+                    <th>% Acerto</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+        <p id="mensagem-sem-ranking" style="display: none;">Nenhum registro de ranking encontrado ainda. Jogue para aparecer aqui!</p>
+
+        <button class="btn-voltar" onclick="window.location.href='index.html'">Voltar à Tela Inicial</button>
+    </div>
+
+    <script>
+        const tabelaRankingBody = document.querySelector('#tabela-ranking tbody');
+        const filtroSerie = document.getElementById('filtro-serie');
+        const filtroOperacao = document.getElementById('filtro-operacao');
+        const mensagemSemRanking = document.getElementById('mensagem-sem-ranking');
+
+        
+
+        let historicoCompleto = [];
+
+        /**
+         * Carrega o histórico de pontuações do localStorage, ordena e renderiza o ranking.
+         */
+        function carregarRanking() {
+            const dadosSalvos = localStorage.getItem('historicoRanking');
+            if (dadosSalvos) {
+                historicoCompleto = JSON.parse(dadosSalvos);
+                // Ordenar por % de acerto (do maior para o menor)
+                // Em caso de empate, ordenar por número de acertos (do maior para o menor)
+                historicoCompleto.sort((a, b) => {
+                    const percentA = (a.acertos / a.totalPerguntas) || 0;
+                    const percentB = (b.acertos / b.totalPerguntas) || 0;
+                    if (percentA !== percentB) {
+                        return percentB - percentA;
+                    }
+                    return b.acertos - a.acertos;
+                });
+                renderizarRanking();
+                // O display da mensagemSemRanking será gerenciado por renderizarRanking
+            } else {
+                tabelaRankingBody.innerHTML = ''; // Garante que a tabela esteja vazia
+                mensagemSemRanking.textContent = 'Nenhum registro de ranking encontrado ainda. Jogue para aparecer aqui!';
+                mensagemSemRanking.style.display = 'block';
+            }
+        }
+
+        /**
+         * Renderiza a tabela de ranking aplicando os filtros selecionados.
+         */
+        function renderizarRanking() {
+            tabelaRankingBody.innerHTML = ''; // Limpa a tabela antes de renderizar
+            const serieSelecionada = filtroSerie.value;
+            const operacaoSelecionada = filtroOperacao.value;
+
+            const dadosFiltrados = historicoCompleto.filter(registro => {
+                const matchSerie = (serieSelecionada === 'todos' || registro.serie === serieSelecionada);
+                const matchOperacao = (operacaoSelecionada === 'todas' || registro.operacao === operacaoSelecionada);
+                return matchSerie && matchOperacao;
+            });
+
+            if (dadosFiltrados.length === 0) {
+                mensagemSemRanking.textContent = "Nenhum registro encontrado para os filtros selecionados.";
+                mensagemSemRanking.style.display = 'block';
+                return;
+            } else {
+                 mensagemSemRanking.style.display = 'none'; // Esconde a mensagem se houver dados
+            }
+
+            dadosFiltrados.forEach(registro => {
+                const row = tabelaRankingBody.insertRow();
+                const percentAcerto = ((registro.acertos / registro.totalPerguntas) * 100).toFixed(0) + '%';
+                const dataFormatada = new Date(registro.data).toLocaleDateString('pt-BR');
+
+                row.insertCell().textContent = registro.nomeAluno;
+                row.insertCell().textContent = registro.nomeEscola;
+                row.insertCell().textContent = registro.nomeProfessora;
+                row.insertCell().textContent = `${registro.serie}ª Série`;
+                row.insertCell().textContent = registro.operacao;
+                row.insertCell().textContent = registro.acertos;
+                row.insertCell().textContent = registro.totalPerguntas;
+                row.insertCell().textContent = percentAcerto;
+                row.insertCell().textContent = dataFormatada;
+            });
+        }
+
+        // Adiciona event listeners para os filtros
+        filtroSerie.addEventListener('change', renderizarRanking);
+        filtroOperacao.addEventListener('change', renderizarRanking);
+
+        // Carrega o ranking quando a página é carregada
+        document.addEventListener('DOMContentLoaded', carregarRanking);
+    </script>
+</body>
+</html>

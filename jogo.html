@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemática Divertida para Crianças</title>
+    <style>
+        /* Estilos gerais para o corpo da página */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Cabeçalho */
+        .cabecalho {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            /* Adicionado para ocupar largura total */
+            max-width: 1200px;
+            /* Alinhado com container-principal */
+            box-sizing: border-box;
+        }
+
+        .cabecalho h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        /* Estilos para a seleção de série */
+        .selecao-serie {
+            margin-bottom: 25px;
+            text-align: center;
+            width: 100%;
+            /* Para centralizar o select corretamente */
+        }
+
+        .selecao-serie label {
+            display: block;
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        #select-serie {
+            padding: 10px 15px;
+            font-size: 1.1em;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            background-color: #e9f5ff;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+            width: 90%;
+            max-width: 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #select-serie:hover,
+        #select-serie:focus {
+            border-color: #0056b3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Contêiner principal para o conteúdo */
+        .container-principal {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Área de jogo */
+        .area-jogo {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .painel-placar p {
+            font-size: 1.2em;
+            color: #333;
+            margin: 5px 0;
+        }
+
+        .painel-placar span {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .questao {
+            text-align: center;
+            width: 100%;
+            /* Garante que a div ocupe o espaço necessário */
+        }
+
+        .questao p {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .questao span {
+            color: #ff5722;
+        }
+
+        #input-resposta {
+            padding: 12px;
+            font-size: 1.5em;
+            width: 150px;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            margin-right: 10px;
+            outline: none;
+        }
+
+        #input-resposta:focus {
+            border-color: #007bff;
+        }
+
+        #btn-verificar {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #btn-verificar:hover {
+            background-color: #0056b3;
+        }
+
+        /* Área de feedback */
+        .feedback {
+            min-height: 40px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .feedback.certo {
+            color: #28a745;
+        }
+
+        .feedback.errado {
+            color: #dc3545;
+        }
+
+        .btn-acao {
+            background-color: #6c757d;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-acao:hover {
+            background-color: #5a6268;
+        }
+
+        /* Progresso da Pergunta */
+        #progresso-pergunta {
+            font-size: 1.1em;
+            color: #666;
+            margin-top: 10px;
+            min-height: 20px;
+            /* Para evitar saltos no layout */
+        }
+
+        /* Relatório Final */
+        .relatorio-final {
+            background-color: #e6ffe6;
+            /* Fundo mais claro para destaque */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            display: none;
+            /* Escondido por padrão */
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .relatorio-final h2 {
+            color: #28a745;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .relatorio-final p {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .relatorio-final button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+            /* Espaço entre os botões */
+        }
+
+        .relatorio-final button:hover {
+            background-color: #0056b3;
+        }
+
+
+        /* Seleção de Operação (agora será escondida no modo de jogo sequencial) */
+        .selecao-operacao {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+            min-width: 250px;
+            display: none;
+            /* ESCONDIDO POR PADRÃO - SÓ APARECE NA TELA INICIAL */
+        }
+
+        .selecao-operacao h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .btn-operacao {
+            background-color: #ffc107;
+            color: #333;
+            padding: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-operacao:hover {
+            background-color: #e0a800;
+            transform: translateY(-3px);
+        }
+
+        /* Cores específicas para os botões de operação (para diferenciá-los) */
+        #btn-adicao {
+            background-color: #28a745;
+            color: white;
+        }
+
+        #btn-adicao:hover {
+            background-color: #218838;
+        }
+
+        #btn-subtracao {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        #btn-subtracao:hover {
+            background-color: #c82333;
+        }
+
+        #btn-multiplicacao {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        #btn-multiplicacao:hover {
+            background-color: #e0a800;
+        }
+
+        #btn-divisao {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        #btn-divisao:hover {
+            background-color: #138496;
+        }
+
+        /* NOVO: Estilos para a Barra de Progresso */
+        .barra-progresso-container {
+            width: 90%;
+            max-width: 400px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .barra-progresso-fundo {
+            width: 100%;
+            height: 25px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            /* Garante que o preenchimento não saia da borda */
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .barra-progresso-preenchimento {
+            height: 100%;
+            width: 0%;
+            /* Começa em 0% */
+            background-color: #4CAF50;
+            /* Verde vibrante */
+            border-radius: 12px;
+            transition: width 0.5s ease-in-out;
+            /* Anima a transição da largura */
+        }
+
+        .progresso-texto {
+            font-size: 1em;
+            color: #555;
+            margin-top: 5px;
+            display: block;
+            font-weight: bold;
+        }
+
+
+        /* Media Queries para responsividade em telas menores */
+        @media (max-width: 768px) {
+            .container-principal {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .area-jogo,
+            .selecao-operacao {
+                width: 90%;
+                max-width: 500px;
+            }
+
+            .cabecalho h1 {
+                font-size: 2em;
+            }
+
+            .questao p {
+                font-size: 1.8em;
+            }
+
+            #input-resposta,
+            #btn-verificar {
+                font-size: 1.3em;
+                padding: 10px;
+            }
+
+            .btn-operacao {
+                font-size: 1.1em;
+                padding: 12px;
+            }
+
+            .relatorio-final {
+                padding: 20px;
+                gap: 10px;
+            }
+
+            .relatorio-final h2 {
+                font-size: 1.8em;
+            }
+
+            .relatorio-final p {
+                font-size: 1.1em;
+            }
+
+            .relatorio-final button {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="cabecalho">
+        <h1>Matemática Divertida!</h1>
+    </header>
+
+    <main class="container-principal">
+        <section class="area-jogo">
+            <div class="painel-placar">
+                <p>Acertos: <span id="pontos-acertos">0</span></p>
+                <p>Erros: <span id="pontos-erros">0</span></p>
+                <p id="progresso-pergunta">Operação: Adição | Pergunta 1 de 5</p>
+            </div>
+
+            <div class="barra-progresso-container" id="barra-progresso-container">
+                <div class="barra-progresso-fundo">
+                    <div class="barra-progresso-preenchimento" id="barra-progresso-preenchimento"></div>
+                </div>
+                <span class="progresso-texto" id="progresso-geral-texto">0% Completo</span>
+            </div>
+            <div class="questao">
+                <p id="pergunta">Qual é o resultado de: <span id="num1">?</span> <span id="operador">?</span> <span
+                        id="num2">?</span> = </p>
+                <input type="number" id="input-resposta" placeholder="Sua resposta">
+                <button id="btn-verificar">Verificar</button>
+            </div>
+
+            <div class="feedback" id="area-feedback">
+            </div>
+
+        </section>
+
+        <section class="relatorio-final" id="relatorio-final">
+        </section>
+
+        <section class="selecao-operacao">
+            <h2>Escolha a Operação:</h2>
+
+            <div class="selecao-serie">
+                <label for="select-serie">Nível de Dificuldade (Série):</label>
+                <select id="select-serie">
+                    <option value="1">1ª Série (Educação Infantil/Fundamental I)</option>
+                    <option value="2">2ª Série (Fundamental I)</option>
+                    <option value="3">3ª Série (Fundamental I)</option>
+                    <option value="4">4ª Série (Fundamental I)</option>
+                    <option value="5">5ª Série (Fundamental I)</option>
+                </select>
+            </div>
+
+            <button id="btn-adicao" class="btn-operacao">Adição (+)</button>
+            <button id="btn-subtracao" class="btn-operacao">Subtração (-)</button>
+            <button id="btn-multiplicacao" class="btn-operacao">Multiplicação (x)</button>
+            <button id="btn-divisao" class="btn-operacao">Divisão (÷)</button>
+        </section>
+    </main>
+
+    <!-- <audio id="som-acerto" src="sounds/acerto.mp3" preload="auto"></audio>
+    <audio id="som-erro" src="sounds/erro.mp3" preload="auto"></audio> -->
+
+    <script>
+        // --- Elementos do DOM (Document Object Model) ---
+        const num1Span = document.getElementById('num1');
+        const operadorSpan = document.getElementById('operador');
+        const num2Span = document.getElementById('num2');
+        const inputResposta = document.getElementById('input-resposta');
+        const btnVerificar = document.getElementById('btn-verificar');
+        const areaFeedback = document.getElementById('area-feedback');
+        const pontosAcertosSpan = document.getElementById('pontos-acertos');
+        const pontosErrosSpan = document.getElementById('pontos-erros');
+        const selectSerie = document.getElementById('select-serie');
+        const progressoPergunta = document.getElementById('progresso-pergunta');
+        const relatorioFinal = document.getElementById('relatorio-final');
+        const areaJogo = document.querySelector('.area-jogo');
+        const barraProgressoPreenchimento = document.getElementById('barra-progresso-preenchimento'); // NOVO
+        const progressoGeralTexto = document.getElementById('progresso-geral-texto'); // NOVO
+
+
+        // Elementos de áudio (certifique-se de que os arquivos .mp3 existem no caminho 'sounds/')
+        const somAcerto = document.getElementById('som-acerto');
+        const somErro = document.getElementById('som-erro');
+
+        // --- Variáveis de Estado do Jogo ---
+        let numero1 = 0;
+        let numero2 = 0;
+        let resultadoCorreto = 0;
+        let acertos = 0; // Acertos da operação atual (resetado)
+        let erros = 0; // Erros da operação atual (resetado)
+        let totalPerguntas = 0; // Contagem total de perguntas para o ranking
+
+        // NOVO: Placar total para o ranking (NÃO RESETAM DURANTE O JOGO)
+        let acertosTotais = 0;
+        let errosTotais = 0;
+
+
+        // NOVO: Variáveis para controle do fluxo de operações
+        const operacoesDisponiveis = ['+', '-', 'x', '÷']; // Ordem sequencial das operações
+        let indiceOperacaoAtual = 0; // Índice da operação atual no array `operacoesDisponiveis`
+        const limiteContasPorOperacao = 5; // Quantas contas de cada operação antes de mudar
+        let contasNaOperacaoAtual = 0; // Contador de contas para a operação matemática atual
+        let operadorAtual = operacoesDisponiveis[indiceOperacaoAtual]; // Inicia com a primeira operação
+
+        // Informações do aluno (vindo do localStorage)
+        let alunoAtual = null;
+
+        // Arrays de frases de incentivo e erro
+        const frasesAcerto = [
+            "Certo! Você é um gênio! 🎉",
+            "Isso mesmo! Parabéns! ✨",
+            "Uau! Resposta correta! 🥳",
+            "Incrível! Mandou muito bem! 👍",
+            "Perfeito! Você acertou! ⭐"
+        ];
+
+        const frasesErro = [
+            "Ops! Quase lá, tente de novo! 🤔",
+            "Não foi dessa vez, mas continue tentando! 😉",
+            "Vamos revisar. Tente uma resposta diferente! 💡",
+            "Não desanime! Você consegue na próxima! 💪",
+            "Continue praticando! A resposta correta era [resultado]. 🙁"
+        ];
+
+        // Configurações de dificuldade por série e operação
+        const niveisDificuldade = {
+            "1": { // 1ª Série (Educação Infantil/Fundamental I)
+                "+": { min1: 1, max1: 10, min2: 1, max2: 10 }, // Até 10 + 10
+                "-": { min1: 5, max1: 15, min2: 1, max2: 10 }, // Subtrações simples
+                "x": { min1: 1, max1: 5, min2: 1, max2: 5 }, // Multiplicação até 5x5
+                "÷": { min1: 2, max1: 10, min2: 1, max2: 5 } // Divisão com resultados simples
+            },
+            "2": { // 2ª Série (Fundamental I)
+                "+": { min1: 10, max1: 50, min2: 1, max2: 20 }, // Soma com dezenas
+                "-": { min1: 10, max1: 50, min2: 1, max2: 20 },
+                "x": { min1: 1, max1: 10, min2: 1, max2: 10 }, // Multiplicação até 10x10
+                "÷": { min1: 10, max1: 50, min2: 2, max2: 10 } // Divisão com números maiores
+            },
+            "3": { // 3ª Série (Fundamental I)
+                "+": { min1: 50, max1: 200, min2: 10, max2: 100 }, // Centenas
+                "-": { min1: 50, max1: 200, min2: 10, max2: 100 },
+                "x": { min1: 5, max1: 15, min2: 5, max2: 15 }, // Multiplicação um pouco mais complexa
+                "÷": { min1: 20, max1: 100, min2: 5, max2: 10 } // Divisão mais elaborada
+            },
+            "4": { // 4ª Série (Fundamental I)
+                "+": { min1: 100, max1: 500, min2: 50, max2: 200 },
+                "-": { min1: 100, max1: 500, min2: 50, max2: 200 },
+                "x": { min1: 10, max1: 20, min2: 10, max2: 20 }, // Multiplicação com dezenas
+                "÷": { min1: 50, max1: 200, min2: 10, max2: 20 }
+            },
+            "5": { // 5ª Série (Fundamental I)
+                "+": { min1: 200, max1: 1000, min2: 100, max2: 500 },
+                "-": { min1: 200, max1: 1000, min2: 100, max2: 500 },
+                "x": { min1: 10, max1: 30, min2: 10, max2: 30 }, // Multiplicação mais avançada
+                "÷": { min1: 100, max1: 500, min2: 10, max2: 25 }
+            }
+        };
+
+        // --- Funções Principais ---
+
+        /**
+         * Carrega as informações do aluno do localStorage ao iniciar a página.
+         */
+        function carregarInfoAluno() {
+            const alunoSalvo = localStorage.getItem('alunoAtual');
+            if (alunoSalvo) {
+                alunoAtual = JSON.parse(alunoSalvo);
+                selectSerie.value = alunoAtual.serie; // Define a série selecionada no dropdown
+            }
+        }
+
+        /**
+         * Gera uma nova conta matemática baseada na operação e dificuldade atual.
+         */
+        function gerarNovaConta() {
+            inputResposta.value = '';
+            areaFeedback.textContent = '';
+            areaFeedback.className = 'feedback';
+
+            // Garante que o operadorAtual esteja sincronizado com o índice
+            operadorAtual = operacoesDisponiveis[indiceOperacaoAtual];
+
+            const serieSelecionada = selectSerie.value;
+            const configDificuldade = niveisDificuldade[serieSelecionada][operadorAtual];
+
+            let minNum1 = configDificuldade.min1;
+            let maxNum1 = configDificuldade.max1;
+            let minNum2 = configDificuldade.min2;
+            let maxNum2 = configDificuldade.max2;
+
+            numero1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+            numero2 = Math.floor(Math.random() * (maxNum2 - minNum2 + 1)) + minNum2;
+
+            if (operadorAtual === '-') {
+                if (numero1 < numero2) {
+                    [numero1, numero2] = [numero2, numero1];
+                }
+            } else if (operadorAtual === '÷') {
+                // Para divisão, garantir que numero1 seja múltiplo de numero2 e numero2 não seja zero
+                while (numero2 === 0 || numero1 % numero2 !== 0) {
+                    numero1 = Math.floor(Math.random() * (maxNum1 - minNum1 + 1)) + minNum1;
+                    numero2 = Math.floor(Math.random() * (maxNum2 - minNum2 + 1)) + minNum2;
+                    if (numero2 === 0) numero2 = 1;
+                }
+            }
+
+            switch (operadorAtual) {
+                case '+':
+                    resultadoCorreto = numero1 + numero2;
+                    break;
+                case '-':
+                    resultadoCorreto = numero1 - numero2;
+                    break;
+                case 'x':
+                    resultadoCorreto = numero1 * numero2;
+                    break;
+                case '÷':
+                    resultadoCorreto = numero1 / numero2;
+                    break;
+            }
+
+            num1Span.textContent = numero1;
+            operadorSpan.textContent = operadorAtual;
+            num2Span.textContent = numero2;
+            inputResposta.focus();
+
+            // Atualiza o texto de progresso da pergunta
+            progressoPergunta.textContent = `Operação: ${obterNomeOperacao(operadorAtual)} | Pergunta ${contasNaOperacaoAtual + 1} de ${limiteContasPorOperacao}`;
+
+            // NOVO: Atualiza a barra de progresso após gerar nova conta
+            atualizarBarraProgresso();
+        }
+
+        /**
+         * Retorna o nome completo da operação para exibição.
+         * @param {string} op O símbolo da operação.
+         * @returns {string} O nome completo da operação.
+         */
+        function obterNomeOperacao(op) {
+            switch (op) {
+                case '+': return 'Adição';
+                case '-': return 'Subtração';
+                case 'x': return 'Multiplicação';
+                case '÷': return 'Divisão';
+                default: return '';
+            }
+        }
+
+        /**
+         * Verifica a resposta do usuário, atualiza o placar e gerencia o fluxo do jogo (próxima conta/operação/fim).
+         */
+        function verificarResposta() {
+            const respostaUsuario = parseInt(inputResposta.value);
+
+            if (isNaN(respostaUsuario)) {
+                areaFeedback.textContent = 'Por favor, digite um número!';
+                areaFeedback.className = 'feedback';
+                return;
+            }
+
+            totalPerguntas++; // Incrementa o total de perguntas feitas no jogo inteiro
+
+            if (respostaUsuario === resultadoCorreto) {
+                const fraseAleatoria = frasesAcerto[Math.floor(Math.random() * frasesAcerto.length)];
+                areaFeedback.textContent = fraseAleatoria;
+                areaFeedback.classList.add('certo');
+                acertos++; // Acertos da operação atual
+                acertosTotais++; // NOVO: Acertos do jogo todo
+                pontosAcertosSpan.textContent = acertos;
+                somAcerto.currentTime = 0;
+                somAcerto.play();
+            } else {
+                let fraseAleatoria = frasesErro[Math.floor(Math.random() * frasesErro.length)];
+                fraseAleatoria = fraseAleatoria.replace('[resultado]', resultadoCorreto);
+
+                areaFeedback.textContent = fraseAleatoria;
+                areaFeedback.classList.add('errado');
+                erros++; // Erros da operação atual
+                errosTotais++; // NOVO: Erros do jogo todo
+                pontosErrosSpan.textContent = erros;
+                somErro.currentTime = 0;
+                somErro.play();
+            }
+
+            contasNaOperacaoAtual++; // Incrementa o contador da conta na operação atual
+
+            // Desabilita input e botão verificar até a próxima conta
+            inputResposta.disabled = true;
+            btnVerificar.disabled = true;
+
+            // Define um pequeno delay antes de gerar a próxima conta ou mudar de operação
+            setTimeout(() => {
+                if (contasNaOperacaoAtual >= limiteContasPorOperacao) {
+                    // Chegou ao limite de contas para a operação atual
+                    indiceOperacaoAtual++; // Passa para a próxima operação
+
+                    if (indiceOperacaoAtual < operacoesDisponiveis.length) {
+                        // Ainda há operações restantes
+                        contasNaOperacaoAtual = 0; // Reinicia o contador para a nova operação
+                        acertos = 0; // Reseta acertos para a nova operação
+                        erros = 0;   // Reseta erros para a nova operação
+                        pontosAcertosSpan.textContent = acertos;
+                        pontosErrosSpan.textContent = erros;
+                        gerarNovaConta(); // Gera a primeira conta da nova operação
+                        inputResposta.disabled = false;
+                        btnVerificar.disabled = false;
+                    } else {
+                        // Todas as operações foram completadas
+                        mostrarRelatorioFinal();
+                    }
+                } else {
+                    // Ainda há contas para fazer na operação atual
+                    gerarNovaConta(); // Gera a próxima conta na mesma operação
+                    inputResposta.disabled = false;
+                    btnVerificar.disabled = false;
+                }
+                // NOVO: Atualiza a barra de progresso após cada verificação
+                atualizarBarraProgresso();
+            }, 1000); // Pequeno delay de 1 segundo para o feedback ser lido
+        }
+
+        /**
+         * Salva a pontuação do jogo atual no histórico do localStorage.
+         */
+        function salvarHistoricoPontuacao() {
+            const historicoExistente = JSON.parse(localStorage.getItem('historicoRanking')) || [];
+
+            const novaPontuacao = {
+                nomeAluno: alunoAtual ? alunoAtual.aluno : 'Aluno(a) Desconhecido(a)',
+                nomeEscola: alunoAtual ? alunoAtual.escola : 'Escola Desconhecida',
+                nomeProfessora: alunoAtual ? alunoAtual.professora : 'Professora Desconhecida',
+                serie: alunoAtual ? alunoAtual.serie : 'N/A',
+                operacao: 'Múltiplas', // Agora o jogo abrange várias operações
+                acertos: acertosTotais, // NOVO: Usa os acertos totais do jogo
+                erros: errosTotais,     // NOVO: Usa os erros totais do jogo
+                totalPerguntas: totalPerguntas,
+                data: new Date().toISOString() // Data e hora atual
+            };
+
+            historicoExistente.push(novaPontuacao);
+            localStorage.setItem('historicoRanking', JSON.stringify(historicoExistente));
+        }
+
+        /**
+         * Exibe o relatório final do jogo e botões de ação.
+         */
+        function mostrarRelatorioFinal() {
+            // Esconde a área de jogo e a barra de progresso
+            areaJogo.style.display = 'none';
+            document.getElementById('barra-progresso-container').style.display = 'none'; // NOVO: Esconde a barra
+
+            // Zera os contadores visíveis para a próxima jogada
+            pontosAcertosSpan.textContent = 0;
+            pontosErrosSpan.textContent = 0;
+            progressoPergunta.textContent = ''; // Limpa o progresso
+
+            salvarHistoricoPontuacao(); // Salva a pontuação antes de mostrar o relatório
+
+            const mensagemRelatorio = `
+                <h2>Jogo Concluído!</h2>
+                <p>Olá, ${alunoAtual ? alunoAtual.aluno : 'aluno(a)'}!</p>
+                <p>Você acertou <span style="color: #28a745; font-weight: bold;">${acertosTotais}</span> de <span style="font-weight: bold;">${totalPerguntas}</span> perguntas no total.</p>
+                <p>Seus erros: <span style="color: #dc3545; font-weight: bold;">${errosTotais}</span></p>
+                <button onclick="jogarNovamente()">Jogar Novamente</button>
+                <button onclick="verRanking()">Ver Ranking</button>
+                <button onclick="voltarParaEntrada()">Voltar à Tela Inicial</button>
+            `;
+
+            relatorioFinal.innerHTML = mensagemRelatorio;
+            relatorioFinal.style.display = 'flex'; // Exibe o relatório
+        }
+
+        /**
+         * Reinicia o jogo para uma nova partida.
+         */
+        function jogarNovamente() {
+            // Reseta todas as variáveis de controle do jogo
+            acertos = 0;
+            erros = 0;
+            acertosTotais = 0; // NOVO: Reseta acertos totais
+            errosTotais = 0; // NOVO: Reseta erros totais
+            totalPerguntas = 0;
+            indiceOperacaoAtual = 0;
+            contasNaOperacaoAtual = 0;
+            operadorAtual = operacoesDisponiveis[indiceOperacaoAtual]; // Volta para a primeira operação
+
+            // Atualiza os placares visíveis
+            pontosAcertosSpan.textContent = acertos;
+            pontosErrosSpan.textContent = erros;
+
+            // Esconde o relatório final e mostra a área de jogo e a barra de progresso
+            relatorioFinal.style.display = 'none';
+            areaJogo.style.display = 'flex';
+            document.getElementById('barra-progresso-container').style.display = 'block'; // NOVO: Mostra a barra
+
+            // Habilita os inputs e botões
+            inputResposta.disabled = false;
+            btnVerificar.disabled = false;
+
+            gerarNovaConta(); // Gera a primeira conta do novo jogo
+            atualizarBarraProgresso(); // NOVO: Atualiza a barra ao reiniciar
+        }
+
+        /**
+         * Redireciona para a página de ranking.
+         */
+        function verRanking() {
+            window.location.href = 'ranking.html';
+        }
+
+        /**
+         * Redireciona para a tela inicial (index.html).
+         */
+        function voltarParaEntrada() {
+            window.location.href = 'index.html';
+        }
+
+        // NOVO: Função para atualizar a barra de progresso
+        function atualizarBarraProgresso() {
+            const totalDeOperacoes = operacoesDisponiveis.length;
+            const perguntasTotaisDoJogo = totalDeOperacoes * limiteContasPorOperacao;
+
+            // Calcula o total de perguntas já feitas
+            let perguntasFeitasAteAgora = 0;
+            for (let i = 0; i < indiceOperacaoAtual; i++) {
+                perguntasFeitasAteAgora += limiteContasPorOperacao;
+            }
+            perguntasFeitasAteAgora += contasNaOperacaoAtual;
+
+            const porcentagem = (perguntasFeitasAteAgora / perguntasTotaisDoJogo) * 100;
+
+            barraProgressoPreenchimento.style.width = `${porcentagem}%`;
+            progressoGeralTexto.textContent = `${Math.round(porcentagem)}% Completo`;
+        }
+
+        // --- Event Listeners ---
+
+        // Ao clicar no botão "Verificar"
+        btnVerificar.addEventListener('click', verificarResposta);
+
+        // Ao pressionar "Enter" no campo de resposta
+        inputResposta.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                // Garante que a resposta só seja verificada se o input e o botão não estiverem desabilitados
+                if (!inputResposta.disabled && !btnVerificar.disabled) {
+                    verificarResposta();
+                }
+            }
+        });
+
+        // Ao mudar a seleção da série (reincia a conta e o progresso da operação)
+        selectSerie.addEventListener('change', () => {
+            acertos = 0;
+            erros = 0;
+            acertosTotais = 0; // NOVO: Reseta acertos totais
+            errosTotais = 0; // NOVO: Reseta erros totais
+            totalPerguntas = 0;
+            indiceOperacaoAtual = 0;
+            contasNaOperacaoAtual = 0;
+            operadorAtual = operacoesDisponiveis[indiceOperacaoAtual];
+            pontosAcertosSpan.textContent = acertos;
+            pontosErrosSpan.textContent = erros;
+            gerarNovaConta();
+            atualizarBarraProgresso(); // NOVO: Atualiza a barra ao mudar a série
+        });
+
+
+        // --- Inicialização do Jogo ---
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarInfoAluno(); // Carrega as informações do aluno (incluindo a série)
+            gerarNovaConta(); // Gera a primeira conta ao carregar a página
+            atualizarBarraProgresso(); // NOVO: Garante que a barra apareça corretamente no início
+        });
+    </script>
+
+</body>
+
+</html>
