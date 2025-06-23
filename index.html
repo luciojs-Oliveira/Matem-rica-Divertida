@@ -19,7 +19,7 @@
             padding: 10px;
             box-sizing: border-box;
             overflow-x: hidden;
-            overflow-y: auto;
+            /* overflow-y: auto; Removido do body para evitar barras de rolagem duplas se o container já rolar */
         }
 
         /* Novo Wrapper para o Título e o Formulário */
@@ -31,6 +31,8 @@
             max-width: 90%;
             width: 100%;
             flex-wrap: nowrap;
+            /* Adicionado para garantir que o wrapper não seja empurrado para fora */
+            max-height: calc(100vh - 20px); /* 100vh - (padding do body * 2) */
         }
 
         /* Título Principal - Agora ao lado do formulário */
@@ -54,13 +56,15 @@
             text-align: center;
             width: 100%;
             max-width: 550px;
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
+            /* Ajuste o max-height para ser mais dinâmico. O 100vh pode ser alto demais. */
+            /* Ele deve considerar o padding do body e o h1, mas se o h1 estiver empilhado. */
+            max-height: calc(100vh - 20px); /* Comece com uma altura generosa */
+            overflow-y: auto; /* Permite rolagem dentro do container */
             animation: fadeIn 1s ease-out;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: space-between; /* Para empurrar os botões para baixo */
             flex-shrink: 0;
         }
 
@@ -79,9 +83,9 @@
             margin-bottom: 20px;
             text-align: left;
             box-shadow: 3px 3px 5px rgba(0,0,0,0.05);
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.7s ease-out, padding 0.7s ease-out, margin-bottom 0.7s ease-out;
+            max-height: 0; /* Começa oculto */
+            overflow: hidden; /* Garante que o conteúdo não vaze */
+            transition: max-height 0.7s ease-out, padding 0.7s ease-out, margin-bottom 0.7s ease-out, opacity 0.7s ease-out;
             opacity: 0;
             visibility: hidden;
             flex-shrink: 0;
@@ -89,11 +93,13 @@
 
         /* Quando as regras estão visíveis */
         .regras-jogo.visible {
-            max-height: 400px;
+            max-height: 500px; /* Um valor alto o suficiente para a maioria dos conteúdos, mas limitado para forçar o scroll do .container se exceder */
             padding: 15px;
             margin-bottom: 20px;
             opacity: 1;
             visibility: visible;
+            /* Adicionado para permitir rolagem interna se o conteúdo for muito grande para este max-height */
+            overflow-y: auto; 
         }
 
         .regras-jogo h2 {
@@ -165,7 +171,7 @@
 
         /* Botões */
         .button-group {
-            margin-top: auto;
+            margin-top: auto; /* Empurra os botões para o final do container flex */
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
@@ -225,13 +231,18 @@
             .main-content-wrapper {
                 flex-direction: column;
                 gap: 25px;
+                max-width: 95%; /* Permite um pouco mais de largura em telas menores */
+                max-height: unset; /* Remove a altura fixa para que o body possa rolar se necessário */
             }
             h1 {
                 font-size: 2.8em;
                 margin-bottom: 0;
             }
             .container {
-                max-height: calc(100vh - 40px - 2.8em - 25px);
+                /* Ajuste o max-height para considerar a altura do h1 e do padding/gap do body */
+                /* É mais fácil deixar o body com overflow-y: auto; ou usar uma unidade vh mais simples */
+                max-height: calc(100vh - 40px - 2.8em - 25px); /* Ajuste com base no h1 */
+                padding: 20px; /* Ajuste o padding para telas menores */
             }
         }
 
@@ -241,7 +252,8 @@
             }
             .container {
                 padding: 15px;
-                max-height: calc(100vh - 20px - 2.2em - 25px);
+                /* Ajuste o max-height novamente com o novo h1 size */
+                max-height: calc(100vh - 20px - 2.2em - 25px); 
             }
             .regras-jogo {
                 padding: 10px;
@@ -286,10 +298,16 @@
             .container {
                 padding: 10px;
                 max-width: 95%;
+                /* Ajuste o max-height novamente com o novo h1 size */
                 max-height: calc(100vh - 20px - 1.8em - 15px);
             }
+            /* AQUI ESTÁ A MUDANÇA CRÍTICA:
+               Aumentamos o max-height para que todo o conteúdo das regras caiba.
+               Se o conteúdo ainda for maior, o overflow-y: auto do .container pai será acionado. */
             .regras-jogo.visible {
-                max-height: 250px;
+                max-height: 60vh; /* Use vh para ser responsivo à altura da tela */
+                /* ou um valor maior se o 60vh ainda for pouco */
+                /* max-height: 500px; */ /* Alternativamente, um valor fixo alto */
             }
             .form-group {
                 margin-bottom: 6px;
@@ -374,6 +392,7 @@
         const btnToggleRegras = document.getElementById('btn-toggle-regras');
 
         function animateIndividualRules() {
+            // Remove a classe 'show' antes de adicionar para reanimar ou garantir estado inicial
             regraItens.forEach(item => {
                 item.classList.remove('show');
             });
@@ -389,7 +408,8 @@
             regrasJogoBloco.classList.toggle('visible');
             
             if (regrasJogoBloco.classList.contains('visible')) {
-                setTimeout(animateIndividualRules, 500);
+                // Pequeno atraso para a transição de max-height ocorrer antes da animação dos parágrafos
+                setTimeout(animateIndividualRules, 500); 
                 btnToggleRegras.textContent = 'Ocultar Regras';
             } else {
                 regraItens.forEach(item => {
