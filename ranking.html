@@ -71,10 +71,17 @@
             min-width: 150px; /* Garante uma largura mínima para os selects */
         }
 
+        /* Contêiner para a tabela para gerenciar o overflow em telas pequenas */
+        .table-container {
+            width: 100%;
+            overflow-x: auto; /* Adiciona rolagem horizontal se a tabela for muito larga */
+            -webkit-overflow-scrolling: touch; /* Melhor rolagem em dispositivos iOS */
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            /* margin-top e margin-bottom não são mais necessários aqui devido ao gap do container-ranking */
+            min-width: 600px; /* Garante que a tabela não fique muito espremida antes da rolagem */
         }
 
         th, td {
@@ -110,7 +117,6 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            /* margin-top não é mais necessário aqui devido ao gap do container-ranking */
         }
 
         .btn-voltar:hover {
@@ -122,8 +128,7 @@
             color: #777;
             font-size: 1.2em;
             text-align: center;
-            width: 100%; /* Garante que ocupe a largura total para centralizar */
-            /* margin-top e margin-bottom não são mais necessários aqui devido ao gap do container-ranking */
+            width: 100%;
         }
 
         /* Responsividade */
@@ -132,9 +137,12 @@
                 padding: 20px;
                 gap: 20px; /* Ajusta o gap para telas menores */
             }
+            h1 {
+                font-size: 2em; /* Ajusta o tamanho do título */
+            }
             th, td {
-                font-size: 0.8em; /* Diminui a fonte da tabela em telas menores */
-                padding: 8px 5px;
+                font-size: 0.85em; /* Diminui a fonte da tabela em telas menores */
+                padding: 10px 8px;
             }
             .filtros {
                 flex-direction: column; /* Empilha os filtros em telas menores */
@@ -142,16 +150,33 @@
             }
             .filtros select {
                 width: 90%; /* Ocupa mais largura em telas pequenas */
-                max-width: 250px; /* Limita a largura máxima */
+                max-width: 280px; /* Limita a largura máxima */
+            }
+            .filtros .filtro-serie,
+            .filtros .filtro-operacao {
+                width: 100%; /* Garante que ocupem a largura total ao empilhar */
+                justify-content: center; /* Centraliza os elementos dentro do filtro */
             }
         }
 
         @media (max-width: 500px) {
+            .container-ranking {
+                padding: 15px;
+                gap: 15px;
+            }
             h1 {
                 font-size: 1.8em; /* Reduz o tamanho do título em telas muito pequenas */
             }
             th, td {
-                font-size: 0.75em; /* Reduz a fonte da tabela ainda mais */
+                font-size: 0.8em; /* Reduz a fonte da tabela ainda mais */
+                padding: 8px 6px;
+            }
+            .btn-voltar {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            #mensagem-sem-ranking {
+                font-size: 1em;
             }
         }
     </style>
@@ -184,23 +209,25 @@
             </div>
         </div>
 
-        <table id="tabela-ranking">
-            <thead>
-                <tr>
-                    <th>Aluno(a)</th>
-                    <th>Escola</th>
-                    <th>Professora</th>
-                    <th>Série</th>
-                    <th>Operação</th>
-                    <th>Acertos</th>
-                    <th>Total Perg.</th>
-                    <th>% Acerto</th>
-                    <th>Data</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="table-container">
+            <table id="tabela-ranking">
+                <thead>
+                    <tr>
+                        <th>Aluno(a)</th>
+                        <th>Escola</th>
+                        <th>Professora</th>
+                        <th>Série</th>
+                        <th>Operação</th>
+                        <th>Acertos</th>
+                        <th>Total Perg.</th>
+                        <th>% Acerto</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
                 </tbody>
-        </table>
+            </table>
+        </div>
         <p id="mensagem-sem-ranking" style="display: none;">Nenhum registro de ranking encontrado ainda. Jogue para aparecer aqui!</p>
 
         <button class="btn-voltar" onclick="window.location.href='index.html'">Voltar à Tela Inicial</button>
@@ -211,8 +238,6 @@
         const filtroSerie = document.getElementById('filtro-serie');
         const filtroOperacao = document.getElementById('filtro-operacao');
         const mensagemSemRanking = document.getElementById('mensagem-sem-ranking');
-
-        
 
         let historicoCompleto = [];
 
@@ -234,7 +259,6 @@
                     return b.acertos - a.acertos;
                 });
                 renderizarRanking();
-                // O display da mensagemSemRanking será gerenciado por renderizarRanking
             } else {
                 tabelaRankingBody.innerHTML = ''; // Garante que a tabela esteja vazia
                 mensagemSemRanking.textContent = 'Nenhum registro de ranking encontrado ainda. Jogue para aparecer aqui!';
@@ -261,7 +285,7 @@
                 mensagemSemRanking.style.display = 'block';
                 return;
             } else {
-                 mensagemSemRanking.style.display = 'none'; // Esconde a mensagem se houver dados
+                mensagemSemRanking.style.display = 'none'; // Esconde a mensagem se houver dados
             }
 
             dadosFiltrados.forEach(registro => {
